@@ -1,0 +1,83 @@
+PL / SQL 
+
+- procedural 
+- stored procedures, means procedures are like C functions and can be reused 
+- PL/SQL has 3 types of variables 'in', 'out' and 'inout'
+
+in : input given to procedure
+out : output displayed out of procedure
+inout : used both as in and out
+by default any variable is an in type
+
+
+example: 
+
+CREATE OR REPLACE PROCEDURE COUNTROW(cnt out number)
+IS begin
+	select count(*) into cnt
+	from emp;
+end;
+/
+
+Procedure created.
+
+sql> set serveroutput on;
+sql> variable total number;
+sql> execute COUNTROW(:total);
+sql> print total;
+
+
+
+FUNCTIONS IN ORACLE:
+
+CREATE OR REPLACE FUNCTION exppp(doj in date) 
+return number AS
+cnt number;
+BEGIN
+
+cnt := floor((months_between(sysdate, doj))/12);
+return cnt;
+
+END exppp;
+/
+
+sql>	select empno, ename, exppp(hiredate) from emp;
+
+
+
+CREATE FUNCTION cal(n1 in number, n2 in number) return number as n3 number;
+begin
+n3 := n1+ n2;
+return n3;
+end;
+/
+
+
+declare 
+n3 number;
+begin
+n3 := cal(10, 20);
+dbms_output.put_line('Value is n3: ' || n3);
+end;
+/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

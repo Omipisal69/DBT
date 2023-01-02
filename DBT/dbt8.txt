@@ -1,0 +1,89 @@
+**************************************************************************************
+
+1.Write a procedure which will count number of managers in emp table.
+
+CREATE PROCEDURE manager_cnt(cnt out number)
+IS BEGIN
+SELECT COUNT(*) into cnt
+FROM EMP
+WHERE JOB = 'MANAGER';
+END;
+/
+
+execute manager_cnt(:total);
+print total;
+
+
+**************************************************************************************
+2.Write a function which will count the average of 5 numbers. Function should 
+  return avg and take 5 values as input.
+
+CREATE or REPLACE FUNCTION cal(n1 in number, n2 in number) return number as n3 number;
+begin
+n3 := n1+ n2;
+return n3;
+end;
+/
+
+
+CREATE or REPLACE FUNCTION avg5(v1 in number, v2 in number, v3 in number, v4 in number, v5 in number) return number as 
+average number;
+sum number;
+begin
+average:=(v1+v2+v3+v4+v5)/5;
+return average;
+end;
+/
+
+
+declare 
+avgof5 number;
+begin
+avgof5 := avg5(1,2,3,4,5);
+dbms_output.put_line('Average : ' || avgof5);
+end;
+/
+
+**************************************************************************************
+3. Write a function which will create an email id for employee. Email id is created
+   as ... first 3 letters of ename+ first 2 letters of job +'myComp.com'
+
+  create or replace function getEmail(name in varchar2, job in varchar2) return varchar2 as mail varchar2(20);
+  begin
+  mail := concat(concat(substr(name,1,3), substr(job, 1, 2)), '@myComp.com');
+  return mail;
+  end;
+  /
+  
+
+  select ename, job, getEmail(ename, job) from emp;
+
+  select empno, getEmail(empno) from emp;
+
+substr(name,1,3)|| substr(job, 1, 2)|| '@myComp.com'
+
+
+select ename, job, concat(concat(substr(ename,1,3), substr(job, 1, 2)), '@myComp.com') from emp;
+
+**************************************************************************************
+
+4. For the above function write a function which will accept eno as in parameter.
+   Check the output using select statement. 
+
+
+
+  create or replace function getEmail(eno in number) return varchar2 as mail varchar2(20);
+  name1 varchar2(12);
+  job1 varchar2(20);
+  begin
+  select ename into name1 from emp 
+  where empno = eno; 
+  select job into job1 from emp
+  where empno = eno;
+  mail := concat(concat(substr(name1,1,3), substr(job1, 1, 2)), '@myComp.com');
+  return mail;
+  end;
+  /
+  
+
+  select empno, getEmail(empno) from emp;
